@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "solar_panels",
+  "version": "${version}",
+  "name": "Solar Panels",
+  "description": "Highly configurable solar panels for power generation",
+  "authors": [
+    "static"
+  ],
+  "contact": {
+    "repo": "https://github.com/TheStaticVoid/Solar Panels"
+  },
+  "license": "MIT",
+  "icon": "assets/solar_panels/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [],
+    "main": [
+      "dev.thestaticvoid.solar_panels.SolarPanels"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
