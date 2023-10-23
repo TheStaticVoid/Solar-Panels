@@ -9,8 +9,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
 
-public class ModBlockRegistry {
-    public static final SolarPanelBlock BASIC_SOLAR_PANEL = new SolarPanelBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f).requiresTool());
+public class ModBlocks {
+    public static final SolarPanelBlock BASIC_SOLAR_PANEL = new SolarPanelBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f).requiresTool(),
+            1000000, 1000, 8);
 
     public static void initialize() {
         SolarPanels.LOGGER.debug("Registering blocks for " + SolarPanels.MOD_ID);
