@@ -3,61 +3,111 @@ package dev.thestaticvoid.solar_panels.block.entity;
 import dev.thestaticvoid.solar_panels.SolarPanels;
 import dev.thestaticvoid.solar_panels.block.SolarPanelBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
-import team.reborn.energy.api.base.SimpleEnergyStorage;
+import org.jetbrains.annotations.Nullable;
+import team.reborn.energy.api.EnergyStorage;
+import team.reborn.energy.api.base.SimpleSidedEnergyContainer;
 
 public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTicker<SolarPanelBlockEntity> {
-    private SimpleEnergyStorage energyStorage;
-    private boolean canGenerate = false;
-    private SolarPanelBlock block;
+    private final SimpleSidedEnergyContainer energyContainer = new SimpleSidedEnergyContainer() {
+        @Override
+        public long getCapacity() {
+            return SolarPanelBlockEntity.this.getCapacity();
+        }
+
+        @Override
+        public long getMaxInsert(@Nullable Direction side) {
+            return SolarPanelBlockEntity.this.getTransferRate();
+        }
+
+        @Override
+        public long getMaxExtract(@Nullable Direction side) {
+            return SolarPanelBlockEntity.this.getTransferRate();
+        }
+    };
+
+    private final SolarPanelBlock solarPanelBlock;
+    private boolean shouldGenerate;
+    private boolean generating;
 
     public SolarPanelBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BASIC_SOLAR_PANEL_ENTITY, pos, state);
-
-        block = (SolarPanelBlock)state.getBlock();
-        energyStorage = new SimpleEnergyStorage(block.capacity, block.transferSpeed, block.transferSpeed);
-    }
-
-    public long getStoredAmount() {
-        return this.energyStorage.amount;
+        solarPanelBlock = (SolarPanelBlock) state.getBlock();
+        shouldGenerate = false;
+        generating = false;
     }
 
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
+        compoundTag.putLong("amount", getCurrentAmount());
         super.saveAdditional(compoundTag);
-        compoundTag.putLong("amount", energyStorage.amount);
     }
 
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
-        energyStorage.amount = compoundTag.getLong("amount");
+        energyContainer.amount = compoundTag.getLong("amount");
+    }
+
+    public long getCurrentAmount() {
+        return energyContainer.amount;
+    }
+
+    public long getCapacity() {
+        return solarPanelBlock.capacity;
+    }
+
+    public int getTransferRate() {
+        return solarPanelBlock.maxTransfer;
+    }
+
+    public boolean isGenerating() {
+        return generating;
+    }
+
+    private void setIsGenerating(boolean isGenerating) {
+        if (level != null) {
+            if (isGenerating != isGenerating()) {
+                level.setBlockAndUpdate(worldPosition, level.getBlockState(worldPosition).setValue(SolarPanelBlock.ACTIVE, isGenerating));
+            }
+        }
+
+        this.generating = isGenerating;
+    }
+
+    public EnergyStorage getSideEnergyStorage(@Nullable Direction side) {
+        return energyContainer.getSideStorage(side);
     }
 
     @Override
-    public void tick(Level level, BlockPos pos, BlockState state, SolarPanelBlockEntity be) {
-        if (!level.isClientSide) {
+    public void tick(Level level, BlockPos blockPos, BlockState blockState, SolarPanelBlockEntity blockEntity) {
+        if (level != null && !level.isClientSide) {
             if (level.getGameTime() % 20L == 0L) {
-                if (level.dimensionType().hasSkyLight() && level.canSeeSky(pos)) {
-                    canGenerate = true;
-                    level.getBlockState(pos).setValue(SolarPanelBlock.ACTIVE, true);
-                } else {
-                    level.getBlockState(pos).setValue(SolarPanelBlock.ACTIVE, false);
-                }
+                shouldGenerate = level.dimensionType().hasSkyLight() &&
+                        level.canSeeSky(blockPos.above()) &&
+                        level.isDay() &&
+                        !level.isRaining() &&
+                        !level.isThundering();
             }
 
-            if (canGenerate) {
-                generatePower();
-            }
+            generate();
         }
     }
 
-    private void generatePower() {
-        energyStorage.amount = Mth.clamp(energyStorage.amount + block.generationRate, 0, block.capacity);
+    public void setStored(long amount) {
+        energyContainer.amount = Math.min(amount, getCapacity());
+        setChanged();
+    }
+
+    public void generate() {
+        setIsGenerating(this.shouldGenerate);
+
+        setStored(getCurrentAmount() + solarPanelBlock.generationRate);
     }
 }
