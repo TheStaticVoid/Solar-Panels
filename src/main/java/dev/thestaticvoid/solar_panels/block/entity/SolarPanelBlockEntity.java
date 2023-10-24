@@ -1,37 +1,19 @@
 package dev.thestaticvoid.solar_panels.block.entity;
 
-import dev.thestaticvoid.solar_panels.SolarPanels;
 import dev.thestaticvoid.solar_panels.block.SolarPanelBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import team.reborn.energy.api.EnergyStorage;
-import team.reborn.energy.api.base.SimpleSidedEnergyContainer;
+import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTicker<SolarPanelBlockEntity> {
-    private final SimpleSidedEnergyContainer energyContainer = new SimpleSidedEnergyContainer() {
-        @Override
-        public long getCapacity() {
-            return SolarPanelBlockEntity.this.getCapacity();
-        }
-
-        @Override
-        public long getMaxInsert(@Nullable Direction side) {
-            return SolarPanelBlockEntity.this.getTransferRate();
-        }
-
-        @Override
-        public long getMaxExtract(@Nullable Direction side) {
-            return SolarPanelBlockEntity.this.getTransferRate();
-        }
-    };
-
+    public final SimpleEnergyStorage energyContainer;
     private final SolarPanelBlock solarPanelBlock;
     private boolean shouldGenerate;
     private boolean generating;
@@ -41,6 +23,13 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
         solarPanelBlock = (SolarPanelBlock) state.getBlock();
         shouldGenerate = false;
         generating = false;
+
+        energyContainer = new SimpleEnergyStorage(solarPanelBlock.capacity, solarPanelBlock.maxTransfer, solarPanelBlock.maxTransfer) {
+            @Override
+            protected void onFinalCommit() {
+                setChanged();
+            }
+        };
     }
 
     @Override
@@ -79,10 +68,6 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
         }
 
         this.generating = isGenerating;
-    }
-
-    public EnergyStorage getSideEnergyStorage(@Nullable Direction side) {
-        return energyContainer.getSideStorage(side);
     }
 
     @Override

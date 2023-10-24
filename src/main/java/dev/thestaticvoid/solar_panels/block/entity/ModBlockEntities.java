@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import team.reborn.energy.api.EnergyStorage;
 
 public class ModBlockEntities {
     public static final BlockEntityType<SolarPanelBlockEntity> BASIC_SOLAR_PANEL_ENTITY =
@@ -14,6 +15,8 @@ public class ModBlockEntities {
 
     public static void initialize() {
         SolarPanels.LOGGER.debug("Registering block entities for " + SolarPanels.MOD_ID);
+
+        EnergyStorage.SIDED.registerForBlockEntity((myBlockEntity, direction) -> myBlockEntity.energyContainer, BASIC_SOLAR_PANEL_ENTITY);
     }
 
     public static BlockEntityType<SolarPanelBlockEntity> registerSolar(String id, SolarPanelBlock block) {
