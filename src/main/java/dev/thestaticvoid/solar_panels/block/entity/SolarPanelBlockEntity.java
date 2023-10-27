@@ -1,15 +1,24 @@
 package dev.thestaticvoid.solar_panels.block.entity;
 
 import dev.thestaticvoid.solar_panels.block.SolarPanelBlock;
+import dev.thestaticvoid.solar_panels.screen.SolarPanelScreenHandler;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
-public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTicker<SolarPanelBlockEntity> {
+public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTicker<SolarPanelBlockEntity>, ExtendedScreenHandlerFactory {
     public final SimpleEnergyStorage energyContainer;
     private final SolarPanelBlock solarPanelBlock;
     private boolean shouldGenerate;
@@ -91,5 +100,25 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
         setIsGenerating(this.shouldGenerate);
 
         setStored(getCurrentAmount() + solarPanelBlock.generationRate);
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+        buf.writeBlockPos(getBlockPos());
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable(solarPanelBlock.getDescriptionId());
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+        return new SolarPanelScreenHandler(i, inventory);
+    }
+
+    public void openMenu(Player player) {
+        player.openMenu(this);
     }
 }

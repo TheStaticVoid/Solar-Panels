@@ -14,7 +14,9 @@
   "icon": "assets/solar_panels/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [],
+    "client": [
+      "dev.thestaticvoid.solar_panels.client.SolarPanelsClient"
+    ],
     "main": [
       "dev.thestaticvoid.solar_panels.SolarPanels"
     ]

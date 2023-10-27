@@ -15,7 +15,7 @@ public class ModBlocks {
     public static void initialize() {
         SolarPanels.LOGGER.debug("Registering blocks for " + SolarPanels.MOD_ID);
 
-        registerBlock(new ResourceLocation(SolarPanels.MOD_ID, "basic_solar_panel"), BASIC_SOLAR_PANEL);
+        registerBlock(SolarPanels.BASIC_SOLAR_PANEL, BASIC_SOLAR_PANEL);
     }
 
     private static void registerBlock(ResourceLocation resourceLocation, Block block) {
