@@ -2,26 +2,26 @@ package dev.thestaticvoid.solar_panels.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.thestaticvoid.solar_panels.screen.component.EnergyComponentArea;
+import dev.thestaticvoid.solar_panels.util.ResourceIdentifier;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
 public class SolarPanelScreen extends AbstractContainerScreen<SolarPanelScreenHandler> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/dispenser.png");
+    private static final ResourceIdentifier TEXTURE = new ResourceIdentifier("textures/gui/solar_panel.png");
+    private EnergyComponentArea energyComponent;
 
     public SolarPanelScreen(SolarPanelScreenHandler handler, Inventory inventory, Component title) {
-        super(handler, inventory, getPositionText(handler).orElse(title));
+        super(handler, inventory, getGeneratingText(handler).orElse(title));
     }
 
-    private static Optional<Component> getPositionText(SolarPanelScreenHandler handler) {
+    private static Optional<Component> getGeneratingText(SolarPanelScreenHandler handler) {
         if (handler != null) {
-            BlockPos pos = handler.getPos();
-            return pos != null ? Optional.of(Component.literal("(" + pos.toShortString() + ")")) : Optional.empty();
+            return Optional.of(Component.translatable("message.solar_panels.generating").append(Component.literal(handler.energyRate + " EU/t")));
         } else {
             return Optional.empty();
         }
@@ -35,6 +35,15 @@ public class SolarPanelScreen extends AbstractContainerScreen<SolarPanelScreenHa
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         blit(matrices, x, y, 0, 0, imageWidth, imageHeight);
+        energyComponent.draw(matrices);
+    }
+
+    @Override
+    protected void renderLabels(PoseStack matrices, int mouseX, int mouseY) {
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+
+        renderEnergyComponentTooltips(matrices, mouseX, mouseY, x, y);
     }
 
     @Override
@@ -49,5 +58,23 @@ public class SolarPanelScreen extends AbstractContainerScreen<SolarPanelScreenHa
         super.init();
 
         titleLabelX = (imageWidth - font.width(title)) / 2;
+        inventoryLabelY = inventoryLabelY - 34;
+
+        assignEnergyComponent();
+    }
+
+    private void assignEnergyComponent() {
+        energyComponent = new EnergyComponentArea(((width - imageWidth) / 2) + 10,
+                ((height - imageHeight) / 2) + 13, menu.energyAmount, menu.energyCapacity);
+    }
+
+    private void renderEnergyComponentTooltips(PoseStack matrices, int pMouseX, int pMouseY, int x, int y) {
+        if (isMouseAboveArea(pMouseX, pMouseY, x, y, 18, 22, 139, 10)) {
+            renderTooltip(matrices, energyComponent.getTooltips(), Optional.empty(), pMouseX - x, pMouseY - y);
+        }
+    }
+
+    private boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, int width, int height) {
+        return (pMouseX >= (x + offsetX) && pMouseX <= (x + offsetX) + width) && (pMouseY >= (y + offsetY) && pMouseY <= (y + offsetY) + height);
     }
 }

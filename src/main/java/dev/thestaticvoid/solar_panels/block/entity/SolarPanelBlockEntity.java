@@ -58,8 +58,8 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
         return solarPanelBlock.capacity;
     }
 
-    public int getTransferRate() {
-        return solarPanelBlock.maxTransfer;
+    public int getGenerationRate() {
+        return solarPanelBlock.generationRate;
     }
 
     public boolean isGenerating() {
@@ -104,7 +104,11 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
 
     @Override
     public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-        buf.writeBlockPos(getBlockPos());
+        CompoundTag nbt = new CompoundTag();
+        nbt.putLong("amount", getCurrentAmount());
+        nbt.putLong("capacity", getCapacity());
+        nbt.putInt("rate", getGenerationRate());
+        buf.writeNbt(nbt);
     }
 
     @Override

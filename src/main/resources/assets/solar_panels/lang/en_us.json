@@ -1,6 +1,5 @@
 {
   "block.solar_panels.basic_solar_panel": "Basic Solar Panel",
   "itemGroup.solar_panels.creative_tab": "Solar Panels",
-
-  "message.solar_panels.solar_panel_tooltip": "Generates energy / tick"
+  "message.solar_panels.generating": "Generating: "
 }
