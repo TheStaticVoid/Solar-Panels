@@ -1,12 +1,19 @@
 package dev.thestaticvoid.solar_panels.block.entity;
 
+import dev.thestaticvoid.solar_panels.SolarPanels;
 import dev.thestaticvoid.solar_panels.block.SolarPanelBlock;
+import dev.thestaticvoid.solar_panels.networking.ModMessages;
 import dev.thestaticvoid.solar_panels.screen.SolarPanelScreenHandler;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -34,6 +41,16 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
             @Override
             protected void onFinalCommit() {
                 setChanged();
+
+                if (!level.isClientSide) {
+                    FriendlyByteBuf buf = PacketByteBufs.create();
+                    buf.writeLong(getCurrentAmount());
+                    buf.writeBlockPos(getBlockPos());
+
+                    for (ServerPlayer player : PlayerLookup.tracking((ServerLevel) level, getBlockPos())) {
+                        ServerPlayNetworking.send(player, ModMessages.ENERGY_AMOUNT_SYNC, buf);
+                    }
+                }
             }
         };
     }
@@ -92,14 +109,19 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     }
 
     public void setStored(long amount) {
-        energyContainer.amount = Math.min(amount, getCapacity());
+        energyContainer.amount = Math.max(Math.min(amount, getCapacity()), 0);
         setChanged();
     }
 
     public void generate() {
         setIsGenerating(this.shouldGenerate);
 
-        setStored(getCurrentAmount() + solarPanelBlock.generationRate);
+        try(Transaction transaction = Transaction.openOuter()) {
+            energyContainer.insert(solarPanelBlock.generationRate, transaction);
+            transaction.commit();
+        } catch (Exception e) {
+            SolarPanels.LOGGER.info("ERROR: " + e.getLocalizedMessage());
+        }
     }
 
     @Override
@@ -109,6 +131,7 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
         nbt.putLong("capacity", getCapacity());
         nbt.putInt("rate", getGenerationRate());
         buf.writeNbt(nbt);
+        buf.writeBlockPos(getBlockPos());
     }
 
     @Override

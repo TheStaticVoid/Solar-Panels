@@ -70,7 +70,8 @@ public class SolarPanelScreen extends AbstractContainerScreen<SolarPanelScreenHa
 
     private void renderEnergyComponentTooltips(PoseStack matrices, int pMouseX, int pMouseY, int x, int y) {
         if (isMouseAboveArea(pMouseX, pMouseY, x, y, 18, 22, 139, 10)) {
-            renderTooltip(matrices, energyComponent.getTooltips(), Optional.empty(), pMouseX - x, pMouseY - y);
+            renderTooltip(matrices, energyComponent.renderTooltipText(menu.energyAmount, menu.energyCapacity),
+                    Optional.empty(), pMouseX - x, pMouseY - y);
         }
     }
 

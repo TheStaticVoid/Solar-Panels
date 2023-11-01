@@ -1,5 +1,6 @@
 package dev.thestaticvoid.solar_panels.screen;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,6 +13,7 @@ public class SolarPanelScreenHandler extends AbstractContainerMenu {
     public long energyAmount;
     public long energyCapacity;
     public int energyRate;
+    public BlockPos pos;
 
     public SolarPanelScreenHandler(int syncId, Inventory inventory, FriendlyByteBuf buf ) {
         this(syncId, inventory);
@@ -21,24 +23,37 @@ public class SolarPanelScreenHandler extends AbstractContainerMenu {
             this.energyCapacity = nbt.getLong("capacity");
             this.energyRate = nbt.getInt("rate");
         }
+        this.pos = buf.readBlockPos();
     }
 
     public SolarPanelScreenHandler(int syncId, Inventory inventory) {
         super(ModScreens.SOLAR_PANEL_SCREEN_HANDLER, syncId);
 
-        int m;
-        int l;
-        for (m = 0; m < 3; ++m) {
-            for (l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(inventory, l + m * 9 + 9, 8 + l * 18, 50 + m * 18));
+        addPlayerInventory(inventory);
+        addPlayerHotbar(inventory);
+
+        this.energyAmount = 0;
+        this.energyRate = 0;
+        this.energyCapacity = 0;
+        this.pos = BlockPos.ZERO;
+    }
+
+    public void setAmount(long amount) {
+        this.energyAmount = amount;
+    }
+
+    private void addPlayerInventory(Inventory inventory) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(inventory, i + j * 9 + 9, 8 + j * 18, 50 + i * 18));
             }
         }
-        for (m = 0; m < 9; ++m) {
-            this.addSlot(new Slot(inventory, m, 8 + m * 18, 108));
+    }
+
+    private void addPlayerHotbar(Inventory inventory) {
+        for (int i = 0; i < 9; ++i) {
+            this.addSlot(new Slot(inventory, i, 8 + i * 18, 108));
         }
-        energyAmount = 0;
-        energyRate = 0;
-        energyCapacity = 0;
     }
 
     @Override

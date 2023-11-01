@@ -20,7 +20,7 @@ public class EnergyComponentArea extends ComponentArea {
         this.energyCapacity = energyCapacity;
     }
 
-    public List<Component> getTooltips() {
+    public List<Component> renderTooltipText(long energyAmount, long energyCapacity) {
         return List.of(Component.literal(energyAmount + " / " + energyCapacity + " EU"));
     }
 

@@ -3,6 +3,7 @@ package dev.thestaticvoid.solar_panels;
 import dev.thestaticvoid.solar_panels.block.ModBlocks;
 import dev.thestaticvoid.solar_panels.block.entity.ModBlockEntities;
 import dev.thestaticvoid.solar_panels.item.ModItems;
+import dev.thestaticvoid.solar_panels.networking.ModMessages;
 import dev.thestaticvoid.solar_panels.screen.ModScreens;
 import dev.thestaticvoid.solar_panels.util.ResourceIdentifier;
 import net.fabricmc.api.ModInitializer;
@@ -24,6 +25,7 @@ public class SolarPanels implements ModInitializer {
     public void onInitialize() {
         LOGGER.debug("Initialized mod: " + MOD_ID);
 
+        ModMessages.initialize();
         ModBlocks.initialize();
         ModItems.initialize();
         ModBlockEntities.initialize();
