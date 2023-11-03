@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -30,6 +31,24 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     private final SolarPanelBlock solarPanelBlock;
     private boolean shouldGenerate;
     private boolean generating;
+    private int fillPercent;
+
+    private final ContainerData containerData = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return fillPercent;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            fillPercent = value;
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    };
 
     public SolarPanelBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BASIC_SOLAR_PANEL_ENTITY, pos, state);
@@ -43,6 +62,8 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
                 setChanged();
 
                 if (!level.isClientSide) {
+                    fillPercent = (int) ((getCurrentAmount() / (float)getCapacity()) * 100);
+
                     FriendlyByteBuf buf = PacketByteBufs.create();
                     buf.writeLong(getCurrentAmount());
                     buf.writeBlockPos(getBlockPos());
@@ -53,6 +74,7 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
                 }
             }
         };
+        fillPercent = 0;
     }
 
     @Override
@@ -64,7 +86,7 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
-        energyContainer.amount = compoundTag.getLong("amount");
+        setStored(compoundTag.getLong("amount"));
     }
 
     public long getCurrentAmount() {
@@ -142,7 +164,7 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-        return new SolarPanelScreenHandler(i, inventory);
+        return new SolarPanelScreenHandler(i, inventory, this.containerData);
     }
 
     public void openMenu(Player player) {

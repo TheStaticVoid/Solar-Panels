@@ -6,6 +6,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -14,9 +16,10 @@ public class SolarPanelScreenHandler extends AbstractContainerMenu {
     public long energyCapacity;
     public int energyRate;
     public BlockPos pos;
+    private final ContainerData containerData;
 
     public SolarPanelScreenHandler(int syncId, Inventory inventory, FriendlyByteBuf buf ) {
-        this(syncId, inventory);
+        this(syncId, inventory, new SimpleContainerData(1));
         CompoundTag nbt = buf.readNbt();
         if (nbt != null) {
             this.energyAmount = nbt.getLong("amount");
@@ -26,7 +29,7 @@ public class SolarPanelScreenHandler extends AbstractContainerMenu {
         this.pos = buf.readBlockPos();
     }
 
-    public SolarPanelScreenHandler(int syncId, Inventory inventory) {
+    public SolarPanelScreenHandler(int syncId, Inventory inventory, ContainerData containerData) {
         super(ModScreens.SOLAR_PANEL_SCREEN_HANDLER, syncId);
 
         addPlayerInventory(inventory);
@@ -36,6 +39,12 @@ public class SolarPanelScreenHandler extends AbstractContainerMenu {
         this.energyRate = 0;
         this.energyCapacity = 0;
         this.pos = BlockPos.ZERO;
+        this.containerData = containerData;
+        this.addDataSlots(containerData);
+    }
+
+    public int getFillPercentage() {
+        return containerData.get(0);
     }
 
     public void setAmount(long amount) {
