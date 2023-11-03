@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "up": "solar_panels:block/tier_2_solar_panel/top",
+    "down": "solar_panels:block/tier_2_solar_panel/bottom",
+    "east": "solar_panels:block/tier_2_solar_panel/side_active",
+    "north": "solar_panels:block/tier_2_solar_panel/side_active",
+    "south": "solar_panels:block/tier_2_solar_panel/side_active",
+    "west": "solar_panels:block/tier_2_solar_panel/side_active",
+    "particle": "solar_panels:block/tier_2_solar_panel/side_active"
+  }
+}

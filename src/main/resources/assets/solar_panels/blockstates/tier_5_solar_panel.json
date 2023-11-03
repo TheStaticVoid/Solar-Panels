@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "active=true": { "model": "solar_panels:block/tier_5_solar_panel_active" },
+    "active=false": { "model": "solar_panels:block/tier_5_solar_panel" }
+  }
+}
