@@ -1,5 +1,10 @@
 {
-  "block.solar_panels.basic_solar_panel": "Basic Solar Panel",
+  "block.solar_panels.tier_1_solar_panel": "Tier 1 Solar Panel",
+  "block.solar_panels.tier_2_solar_panel": "Tier 2 Solar Panel",
+
   "itemGroup.solar_panels.creative_tab": "Solar Panels",
-  "message.solar_panels.generating": "Generating: "
+
+  "message.solar_panels.generation_rate": "Generation Rate: ",
+  "message.solar_panels.max_transfer": "Max Transfer: ",
+  "message.solar_panels.capacity": "Capacity: "
 }

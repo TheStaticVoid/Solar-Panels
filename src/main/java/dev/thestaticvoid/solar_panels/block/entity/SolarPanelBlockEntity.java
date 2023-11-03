@@ -51,7 +51,7 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     };
 
     public SolarPanelBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.BASIC_SOLAR_PANEL_ENTITY, pos, state);
+        super(ModBlockEntities.TIER_1_SOLAR_BLOCK_ENTITY, pos, state);
         solarPanelBlock = (SolarPanelBlock) state.getBlock();
         shouldGenerate = false;
         generating = false;
@@ -108,11 +108,11 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     private void setIsGenerating(boolean isGenerating) {
         if (level != null) {
             if (isGenerating != isGenerating()) {
+                setChanged();
+                this.generating = isGenerating;
                 level.setBlockAndUpdate(worldPosition, level.getBlockState(worldPosition).setValue(SolarPanelBlock.ACTIVE, isGenerating));
             }
         }
-
-        this.generating = isGenerating;
     }
 
     @Override
@@ -123,11 +123,16 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
                         level.canSeeSky(blockPos.above()) &&
                         level.isDay() &&
                         !level.isRaining() &&
-                        !level.isThundering();
+                        !level.isThundering() &&
+                        notFull();
             }
 
             generate();
         }
+    }
+
+    private boolean notFull() {
+        return getCurrentAmount() != getCapacity();
     }
 
     public void setStored(long amount) {
@@ -138,11 +143,13 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     public void generate() {
         setIsGenerating(this.shouldGenerate);
 
-        try(Transaction transaction = Transaction.openOuter()) {
-            energyContainer.insert(solarPanelBlock.generationRate, transaction);
-            transaction.commit();
-        } catch (Exception e) {
-            SolarPanels.LOGGER.info("ERROR: " + e.getLocalizedMessage());
+        if (this.shouldGenerate) {
+            try(Transaction transaction = Transaction.openOuter()) {
+                energyContainer.insert(solarPanelBlock.generationRate, transaction);
+                transaction.commit();
+            } catch (Exception e) {
+                SolarPanels.LOGGER.info("ERROR: " + e.getLocalizedMessage());
+            }
         }
     }
 

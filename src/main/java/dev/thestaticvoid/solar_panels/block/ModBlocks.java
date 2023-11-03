@@ -1,26 +1,27 @@
 package dev.thestaticvoid.solar_panels.block;
 
 import dev.thestaticvoid.solar_panels.SolarPanels;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import dev.thestaticvoid.solar_panels.item.ModItems;
+import dev.thestaticvoid.solar_panels.util.ResourceIdentifier;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
 
 public class ModBlocks {
-    public static final SolarPanelBlock BASIC_SOLAR_PANEL = createSolarPanelBlock(16, 1024, 16384);
+    public static final SolarPanelBlock TIER_1_SOLAR_PANEL = createSolarPanelBlock(1, 512, 8192);
+    public static final SolarPanelBlock TIER_2_SOLAR_PANEL = createSolarPanelBlock(4, 512, 8192);
 
     public static void initialize() {
         SolarPanels.LOGGER.debug("Registering blocks for " + SolarPanels.MOD_ID);
 
-        registerBlock(SolarPanels.BASIC_SOLAR_PANEL, BASIC_SOLAR_PANEL);
+        registerBlock(SolarPanels.TIER_1_SOLAR_PANEL, TIER_1_SOLAR_PANEL);
+        registerBlock(SolarPanels.TIER_2_SOLAR_PANEL, TIER_2_SOLAR_PANEL);
     }
 
-    private static void registerBlock(ResourceLocation resourceLocation, Block block) {
-        Registry.register(Registry.BLOCK, resourceLocation, block);
-        Registry.register(Registry.ITEM, resourceLocation, new BlockItem(block, new FabricItemSettings().group(SolarPanels.SOLAR_PANEL_GROUP)));
+    private static void registerBlock(ResourceIdentifier identifier, Block block) {
+        Registry.register(Registry.BLOCK, identifier, block);
+        ModItems.registerItem(identifier, block);
     }
 
     private static SolarPanelBlock createSolarPanelBlock(int generationRate, int maxTransfer, int capacity) {

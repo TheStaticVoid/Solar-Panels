@@ -18,9 +18,11 @@ public class SolarPanels implements ModInitializer {
     public static final String MOD_ID = "solar_panels";
     public static final Logger LOGGER  = LoggerFactory.getLogger(MOD_ID);
     public static CreativeModeTab SOLAR_PANEL_GROUP = FabricItemGroupBuilder.build(new ResourceLocation(MOD_ID, "creative_tab"),
-            () -> new ItemStack(ModBlocks.BASIC_SOLAR_PANEL));
+            () -> new ItemStack(ModBlocks.TIER_1_SOLAR_PANEL));
 
-    public static final ResourceIdentifier BASIC_SOLAR_PANEL = new ResourceIdentifier("basic_solar_panel");
+    public static final ResourceIdentifier TIER_1_SOLAR_PANEL = new ResourceIdentifier("tier_1_solar_panel");
+    public static final ResourceIdentifier TIER_2_SOLAR_PANEL = new ResourceIdentifier("tier_2_solar_panel");
+
     @Override
     public void onInitialize() {
         LOGGER.debug("Initialized mod: " + MOD_ID);
