@@ -19,10 +19,6 @@ repositories {
             includeGroup "me.shedaniel.cloth"
         }
     }
-
-    maven {
-        url "https://cursemaven.com"
-    }
 }
 
 dependencies {
@@ -42,11 +38,6 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
         exclude group: "net.fabricmc", module: "fabric-loader"
     }
-
-    // For testing transfer, remove before publish
-    // TODO
-    modImplementation "curse.maven:reborncore-237903:4102771"
-    modImplementation "curse.maven:techreborn-233564:4102770"
 }
 
 processResources {
