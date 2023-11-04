@@ -6,7 +6,9 @@ This mod was made to address a lack of a standalone solar mod with easy customiz
 
 ## Textures
 The texture for the solar panels are based off the ZedTech texture pack and were modified by [Flyte-less](https://github.com/Flyte-less/) for inclusion in this mod.
+
 The textures for solar voltaic cells and solar batteries were made by [DeadeyeDutch](https://github.com/JordanVanB)
+
 The solar panel GUI was made by me
 
 ## Credits
