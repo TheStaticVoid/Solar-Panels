@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "solar_panels:item/solar_voltaic_cell"
+  }
+}

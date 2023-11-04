@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "up": "solar_panels:block/solar_casing/top",
+    "down": "solar_panels:block/solar_casing/bottom",
+    "east": "solar_panels:block/solar_casing/side",
+    "north": "solar_panels:block/solar_casing/side",
+    "south": "solar_panels:block/solar_casing/side",
+    "west": "solar_panels:block/solar_casing/side",
+    "particle": "solar_panels:block/solar_casing/side"
+  }
+}

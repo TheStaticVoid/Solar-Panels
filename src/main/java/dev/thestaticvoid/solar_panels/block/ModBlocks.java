@@ -37,19 +37,28 @@ public class ModBlocks {
             config.tier5Capacity
     );
 
+    public static final Block SOLAR_CASING = new Block(FabricBlockSettings.of(Material.METAL).strength(4.0F).requiresTool());
+
     public static void initialize() {
         SolarPanels.LOGGER.debug("Registering blocks for " + SolarPanels.MOD_ID);
 
-        registerBlock(SolarPanels.TIER_1_SOLAR_PANEL, TIER_1_SOLAR_PANEL);
-        registerBlock(SolarPanels.TIER_2_SOLAR_PANEL, TIER_2_SOLAR_PANEL);
-        registerBlock(SolarPanels.TIER_3_SOLAR_PANEL, TIER_3_SOLAR_PANEL);
-        registerBlock(SolarPanels.TIER_4_SOLAR_PANEL, TIER_4_SOLAR_PANEL);
-        registerBlock(SolarPanels.TIER_5_SOLAR_PANEL, TIER_5_SOLAR_PANEL);
+        registerSolarPanelBlock(SolarPanels.TIER_1_SOLAR_PANEL, TIER_1_SOLAR_PANEL);
+        registerSolarPanelBlock(SolarPanels.TIER_2_SOLAR_PANEL, TIER_2_SOLAR_PANEL);
+        registerSolarPanelBlock(SolarPanels.TIER_3_SOLAR_PANEL, TIER_3_SOLAR_PANEL);
+        registerSolarPanelBlock(SolarPanels.TIER_4_SOLAR_PANEL, TIER_4_SOLAR_PANEL);
+        registerSolarPanelBlock(SolarPanels.TIER_5_SOLAR_PANEL, TIER_5_SOLAR_PANEL);
+
+        registerBlock(SolarPanels.SOLAR_CASING, SOLAR_CASING);
+    }
+
+    private static void registerSolarPanelBlock(ResourceIdentifier identifier, Block block) {
+        Registry.register(Registry.BLOCK, identifier, block);
+        ModItems.registerSolarPanelItem(identifier, block);
     }
 
     private static void registerBlock(ResourceIdentifier identifier, Block block) {
         Registry.register(Registry.BLOCK, identifier, block);
-        ModItems.registerItem(identifier, block);
+        ModItems.registerBlockItem(identifier, block);
     }
 
     private static SolarPanelBlock createSolarPanelBlock(int generationRate, int maxTransfer, int capacity) {

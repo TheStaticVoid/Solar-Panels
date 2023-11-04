@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "solar_panels:tier_1_solar_panel",
+    "solar_panels:tier_2_solar_panel",
+    "solar_panels:tier_3_solar_panel",
+    "solar_panels:tier_4_solar_panel",
+    "solar_panels:tier_5_solar_panel",
+    "solar_panels:solar_casing"
+  ]
+}

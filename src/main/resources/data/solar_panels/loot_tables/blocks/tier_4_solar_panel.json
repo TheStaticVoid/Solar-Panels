@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "solar_panels:basic_solar_panel"
+          "name": "solar_panels:tier_4_solar_panel"
         }
       ],
       "conditions": [

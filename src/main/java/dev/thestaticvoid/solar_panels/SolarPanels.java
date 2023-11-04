@@ -25,6 +25,9 @@ public class SolarPanels implements ModInitializer {
     public static final ResourceIdentifier TIER_3_SOLAR_PANEL = new ResourceIdentifier("tier_3_solar_panel");
     public static final ResourceIdentifier TIER_4_SOLAR_PANEL = new ResourceIdentifier("tier_4_solar_panel");
     public static final ResourceIdentifier TIER_5_SOLAR_PANEL = new ResourceIdentifier("tier_5_solar_panel");
+    public static final ResourceIdentifier SOLAR_CASING = new ResourceIdentifier("solar_casing");
+    public static final ResourceIdentifier SOLAR_BATTERY = new ResourceIdentifier("solar_battery");
+    public static final ResourceIdentifier SOLAR_VOLTAIC_CELL = new ResourceIdentifier("solar_voltaic_cell");
 
     @Override
     public void onInitialize() {

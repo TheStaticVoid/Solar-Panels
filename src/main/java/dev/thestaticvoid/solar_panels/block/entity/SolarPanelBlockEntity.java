@@ -51,7 +51,7 @@ public class SolarPanelBlockEntity extends BlockEntity implements BlockEntityTic
     };
 
     public SolarPanelBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.TIER_1_SOLAR_BLOCK_ENTITY, pos, state);
+        super(ModBlockEntities.SOLAR_BLOCK_ENTITY, pos, state);
         solarPanelBlock = (SolarPanelBlock) state.getBlock();
         shouldGenerate = false;
         generating = false;

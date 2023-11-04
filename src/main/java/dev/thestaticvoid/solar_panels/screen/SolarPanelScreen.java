@@ -48,7 +48,7 @@ public class SolarPanelScreen extends AbstractContainerScreen<SolarPanelScreenHa
         if (menu.energyAmount == menu.energyCapacity) {
             fillAmount = 138;
         } else {
-            fillAmount = (int)(Mth.clamp((menu.getFillPercentage() / (float)100) * 138, 0, 138));
+            fillAmount = (int)(Mth.clamp((menu.getFillPercentage() / (float)100) * 160, 0, 138));
         }
         // The overlay bar
         blit(matrices, x + 19, y + 23, 0, 141, fillAmount, 9);
