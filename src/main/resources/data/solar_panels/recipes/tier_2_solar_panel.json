@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "V": {
+      "item": "solar_panels:solar_voltaic_cell"
+    },
+    "S": {
+      "item": "solar_panels:tier_1_solar_panel"
+    },
+    "B": {
+      "item": "solar_panels:solar_battery"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "pattern": [
+    "VVV",
+    "LSL",
+    "BGB"
+  ],
+  "result": {
+    "item": "solar_panels:tier_2_solar_panel"
+  }
+}

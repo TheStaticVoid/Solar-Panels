@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "V": {
+      "item": "solar_panels:solar_voltaic_cell"
+    },
+    "S": {
+      "item": "solar_panels:tier_3_solar_panel"
+    },
+    "B": {
+      "item": "solar_panels:solar_battery"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "pattern": [
+    "VVV",
+    "DSD",
+    "BDB"
+  ],
+  "result": {
+    "item": "solar_panels:tier_4_solar_panel"
+  }
+}
