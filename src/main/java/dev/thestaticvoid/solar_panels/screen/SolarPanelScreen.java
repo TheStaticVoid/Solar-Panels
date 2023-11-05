@@ -33,7 +33,7 @@ public class SolarPanelScreen extends AbstractContainerScreen<SolarPanelScreenHa
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - imageWidth) / 2;
-        int y = (width - imageHeight) / 2;
+        int y = (height - imageHeight) / 2;
 
         guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, 132);
 
