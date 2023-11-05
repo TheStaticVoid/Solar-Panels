@@ -6,8 +6,9 @@ import dev.thestaticvoid.solar_panels.item.ModItems;
 import dev.thestaticvoid.solar_panels.util.ResourceIdentifier;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.SoundType;
 
 public class ModBlocks {
     private static final SolarPanelsConfig config = SolarPanelsConfig.getConfig();
@@ -37,7 +38,7 @@ public class ModBlocks {
             config.tier5Capacity
     );
 
-    public static final Block SOLAR_CASING = new Block(FabricBlockSettings.of(Material.METAL).strength(4.0F).requiresTool());
+    public static final Block SOLAR_CASING = new Block(FabricBlockSettings.create().sound(SoundType.METAL).strength(4.0F).requiresCorrectToolForDrops());
 
     public static void initialize() {
         SolarPanels.LOGGER.debug("Registering blocks for " + SolarPanels.MOD_ID);
@@ -52,18 +53,18 @@ public class ModBlocks {
     }
 
     private static void registerSolarPanelBlock(ResourceIdentifier identifier, Block block) {
-        Registry.register(Registry.BLOCK, identifier, block);
+        Registry.register(BuiltInRegistries.BLOCK, identifier, block);
         ModItems.registerSolarPanelItem(identifier, block);
     }
 
     private static void registerBlock(ResourceIdentifier identifier, Block block) {
-        Registry.register(Registry.BLOCK, identifier, block);
+        Registry.register(BuiltInRegistries.BLOCK, identifier, block);
         ModItems.registerBlockItem(identifier, block);
     }
 
     private static SolarPanelBlock createSolarPanelBlock(int generationRate, int maxTransfer, int capacity) {
         return new SolarPanelBlock(
-                FabricBlockSettings.of(Material.METAL).strength(4.0F).requiresTool(),
+                FabricBlockSettings.create().sound(SoundType.METAL).strength(4.0F).requiresCorrectToolForDrops(),
                 generationRate,
                 maxTransfer,
                 capacity

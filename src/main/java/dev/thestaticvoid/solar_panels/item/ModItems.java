@@ -4,6 +4,7 @@ import dev.thestaticvoid.solar_panels.SolarPanels;
 import dev.thestaticvoid.solar_panels.util.ResourceIdentifier;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -18,14 +19,20 @@ public class ModItems {
     }
 
     public static void registerSolarPanelItem(ResourceIdentifier identifier, Block block) {
-        Registry.register(Registry.ITEM, identifier, new SolarPanelBlockItem(block, new FabricItemSettings().group(SolarPanels.SOLAR_PANEL_GROUP)));
+        SolarPanelBlockItem newItem = new SolarPanelBlockItem(block, new FabricItemSettings());
+        Registry.register(BuiltInRegistries.ITEM, identifier, newItem);
+        SolarPanels.registerItemToCreativeTab(newItem);
     }
 
     public static void registerBlockItem(ResourceIdentifier identifier, Block block) {
-        Registry.register(Registry.ITEM, identifier, new BlockItem(block, new FabricItemSettings().group(SolarPanels.SOLAR_PANEL_GROUP)));
+        BlockItem newItem = new BlockItem(block, new FabricItemSettings());
+        Registry.register(BuiltInRegistries.ITEM, identifier, newItem);
+        SolarPanels.registerItemToCreativeTab(newItem);
     }
 
     public static void registerItem(ResourceIdentifier identifier) {
-        Registry.register(Registry.ITEM, identifier, new Item(new FabricItemSettings().group(SolarPanels.SOLAR_PANEL_GROUP)));
+        Item newItem = new Item(new FabricItemSettings());
+        Registry.register(BuiltInRegistries.ITEM, identifier, newItem);
+        SolarPanels.registerItemToCreativeTab(newItem);
     }
 }

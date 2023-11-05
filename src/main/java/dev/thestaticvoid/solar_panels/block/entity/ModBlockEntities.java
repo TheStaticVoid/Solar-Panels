@@ -5,6 +5,7 @@ import dev.thestaticvoid.solar_panels.block.ModBlocks;
 import dev.thestaticvoid.solar_panels.util.ResourceIdentifier;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import team.reborn.energy.api.EnergyStorage;
 
@@ -20,7 +21,7 @@ public class ModBlockEntities {
 
     public static BlockEntityType<SolarPanelBlockEntity> registerSolar(ResourceIdentifier resourceIdentifier) {
         return Registry.register(
-                Registry.BLOCK_ENTITY_TYPE,
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
                 resourceIdentifier,
                 FabricBlockEntityTypeBuilder
                         .create(SolarPanelBlockEntity::new,
