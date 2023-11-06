@@ -4,6 +4,10 @@ This is a simple solar panel mod for Minecraft Fabric 1.19.2 (and in the future 
 
 This mod was made to address a lack of a standalone solar mod with easy customization on the Fabric mod loader. As such, I do not plan to port this mod to Forge, as there are plenty of options there already.
 
+Available on
+
+[CurseForge](https://curseforge.com/minecraft/mc-mods/solar-panels) | [Modrinth](https://modrinth.com/mod/solar-panels) | [GitHub](https://github.com/TheStaticVoid/Solar-Panels/releases)
+
 ## Textures
 The texture for the solar panels are based off the ZedTech texture pack and were modified by [Flyte-less](https://github.com/Flyte-less/) for inclusion in this mod.
 
